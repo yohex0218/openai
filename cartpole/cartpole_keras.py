@@ -125,9 +125,9 @@ state_count = env.env.observation_space.shape[0]
 action_count = env.env.action_space.n
 
 agent = DQNAgent(state_count, action_count, memory_cap=10000, batch_size=64)
-agent.load("./save/{}-BEST.h5".format(env_name))
-agent.is_learning = False
-agent.epsilon = 0.
+# agent.load("./save/{}-BEST.h5".format(env_name))
+# agent.is_learning = False
+# agent.epsilon = 0.
 
 try:
     while True:
