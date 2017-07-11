@@ -90,9 +90,9 @@ class DQNAgent:
 class Environment:
     def __init__(self, problem):
         self.env = gym.make(problem)
-        self.results = deque(maxlen=10)
+        self.results = deque(maxlen=20)
         self.count = 0
-        self.render = False
+        self.render = True
 
     def run(self, agent):
         s = self.env.reset()
@@ -112,7 +112,7 @@ class Environment:
             if done:
                 self.count += 1
                 self.results.append(total_r)
-                if agent.is_learning and numpy.mean(self.results) > -200.:
+                if agent.is_learning and numpy.mean(self.results) > -300.:
                     print("Stop Learning.")
                     agent.is_learning = False
                     # agent.save("./save/{}-BEST.h5".format(env_name))
@@ -127,10 +127,10 @@ env = Environment(env_name)
 state_count = env.env.observation_space.shape[0]
 high = env.env.action_space.high[0]
 low = env.env.action_space.low[0]
-action_list = numpy.linspace(low, high, 12).reshape(-1,)[:, numpy.newaxis]
+action_list = numpy.linspace(low, high, 6).reshape(-1,)[:, numpy.newaxis]
 
 agent = DQNAgent(state_count, action_list, memory_cap=10000, batch_size=64)
-env.render = False
+# env.render = False
 # agent.load("./save/{}-BEST.h5".format(env_name))
 # agent.is_learning = False
 # agent.epsilon = 0.
