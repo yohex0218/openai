@@ -14,7 +14,7 @@ class DQNAgent:
         self.state_count = state_count
         self.action_count = action_count
         self.model = self._create_model()
-        self.samples = deque(maxlen=memory_cap)
+        self.memory = deque(maxlen=memory_cap)
         self.batch_size = batch_size
         self.gamma = 0.99
         self.epsilon = 1.
@@ -38,7 +38,7 @@ class DQNAgent:
             return numpy.argmax(q)
 
     def observe(self, sample):
-        self.samples.append(sample)
+        self.memory.append(sample)
         if self.epsilon > self.min_epsilon:
             self.epsilon *= self.epsilon_decay
 
@@ -74,8 +74,8 @@ class DQNAgent:
         self.model.fit(x, y, batch_size=self.batch_size, epochs=1, verbose=0)
 
     def _sample(self):
-        n = min(self.batch_size, len(self.samples))
-        return n, random.sample(self.samples, n)
+        n = min(self.batch_size, len(self.memory))
+        return n, random.sample(self.memory, n)
 
     def load(self, name):
         self.model.load_weights(name)
@@ -111,7 +111,7 @@ class Environment:
                 if agent.is_learning and numpy.all(self.results):
                     print("Stop Learning.")
                     agent.is_learning = False
-                    agent.save("./save/{}-BEST.h5".format(env_name))
+                    # agent.save("./save/{}-BEST.h5".format(env_name))
                 break
 
         print("Game:{} Reward:{}".format(self.count, total_r))
