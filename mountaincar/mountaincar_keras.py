@@ -116,7 +116,7 @@ class Environment:
         self.time_limit = self.env.spec.timestep_limit
         self.results = deque(maxlen=10)
         self.count = 0
-        self.render = False
+        self.render = True
 
     def run(self, agent):
         s = self.env.reset()
@@ -154,12 +154,13 @@ env_name = 'MountainCar-v0'
 env = Environment(env_name)
 state_count = env.env.observation_space.shape[0]
 action_count = env.env.action_space.n
+env.render = False
 
 agent = DQNAgent(state_count, action_count, memory_cap=10000, batch_size=64)
-agent.load("./save/{}-BEST.h5".format(env_name))
-agent.is_learning = False
-agent.epsilon = 0.
-env.render = True
+# agent.load("./save/{}-BEST.h5".format(env_name))
+# agent.is_learning = False
+# agent.epsilon = 0.
+# env.render = True
 
 try:
     while True:
